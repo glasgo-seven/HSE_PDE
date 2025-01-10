@@ -10,27 +10,30 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file: ".env"
 
   postgres-db:
     container_name: postgres_db
     image: postgres:latest
     environment:
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
-      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - '5434:${PG_PORT}'
+      - '5434:${POSTGRES_PORT}'
+    env_file: ".env"
 
   mysql:
     image: mysql:latest
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
       MYSQL_DATABASE: ${MYSQL_DB}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASS}
     ports:
       - '${MYSQL_PORT}:3306'
+    env_file: ".env"
 
   airflow-webserver:
     image: apache/airflow:latest
@@ -45,7 +48,8 @@ services:
       - "8080:8080"
     command: "webserver"
     volumes:
-      - ./airflow_dags:/opt/airflow/dags
+      - ./src:/opt/airflow/dags
+    env_file: ".env"
 
 
   airflow-scheduler:
@@ -58,22 +62,23 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: a1b2c3d4e5f6a7b8c9d0e1f2g3h4i5j6
 
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASS}
       MYSQL_DB: ${MYSQL_DB}
       MYSQL_HOST: ${MYSQL_HOST}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PORT: ${MYSQL_PORT}
 
       AIRFLOW_CONN_POSTGRES_DEFAULT: "postgresql+psycopg2://${PG_USER}:${PG_PASSWORD}@${PG_HOST}:${PG_PORT}/${PG_DB}"
-      PG_PASSWORD: ${PG_PASSWORD}
-      PG_DB: ${PG_DB}
-      PG_HOST: ${PG_HOST}
-      PG_USER: ${PG_USER}
-      PG_PORT: ${PG_PORT}
+      PG_PASSWORD: ${POSTGRES_PASS}
+      PG_DB: ${POSTGRES_DB}
+      PG_HOST: ${POSTGRES_HOST}
+      PG_USER: ${POSTGRES_USER}
+      PG_PORT: ${POSTGRES_PORT}
 
     command: "scheduler"
     volumes:
-      - ./airflow_dags:/opt/airflow/dags
+      - ./src:/opt/airflow/dags
+    env_file: ".env"
 
 volumes:
   postgres_data:
