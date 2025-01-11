@@ -1,8 +1,16 @@
-DROP TABLE IF EXISTS Vitrina_ProductPerfomance;
+TRUNCATE TABLE Vitrina_ProductPerfomance;
 
 -- This vitrina focuses on  product sales performance,
 -- including total sales, average price, and stock levels.
-CREATE TABLE Vitrina_ProductPerfomance AS
+INSERT INTO Vitrina_ProductPerfomance (
+	product_id,
+	product_name,
+	category_name,
+	total_sold_quantity,
+	total_revenue,
+	average_price,
+	current_stock
+)
 SELECT 
 	Products.product_id,
 	Products.name						AS product_name,

@@ -10,36 +10,20 @@ from adapter_mysql import MySQL_adapter
 
 
 def postgres_select_table(table, columns):
-	# table_fields = ', '.join(f'"{column}"' for column in columns)
-	# sql_query = f"SELECT {table_fields} FROM {table}"
-
 	adapter = Postgres_adapter(postgres_connection_data)
 	rows = adapter.execute_commit_query(
 		f"SELECT {', '.join(f'"{column}"' for column in columns)} FROM {table}"
 	)
-	
 	return rows
 
 def mysql_insert_data(table, rows, columns):
-	# table_fields = ', '.join(f'`{column}`' for column in columns)
-	# values = ', '.join(['%s'] * len(rows[0]))
-	# sql_query = f"REPLACE INTO `{table}` ({table_fields}) VALUES ({values})"
-
 	adapter = MySQL_adapter(mysql_connection_data)
 	adapter.execute_commit_query(
 		f"REPLACE INTO `{table}` ({', '.join(f'`{column}`' for column in columns)}) VALUES ({', '.join(['%s'] * len(rows[0]))})",
 		rows
 	)
 
-# def load_replicate_config():
-# 	file = open(tables_to_replicate_YAML, 'r')
-# 	config = yaml.safe_load(file)
-# 	file.close()
-
-# 	return config
-
 def replicate_table(table, columns):
-	# select_result = postgres_select_table(table, columns)
 	mysql_insert_data(
 		table,
 		postgres_select_table(table, columns),
@@ -57,8 +41,6 @@ transfer_data_postgres_to_mysql_dag = DAG(
 file = open(tables_to_replicate_YAML, 'r')
 tables_to_replicate = yaml.safe_load(file).get("tables_to_replicate")
 file.close()
-
-# tables_to_replicate = load_replicate_config().get("tables_to_replicate")
 
 previous_task = None
 for table in tables_to_replicate:

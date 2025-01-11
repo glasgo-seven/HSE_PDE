@@ -18,7 +18,6 @@ class MySQL_adapter(Abstract_adapter):
 		)
 		return super().get_cursor(connection)
 
-
 	def execute_commit_query(self, query, params=None):
 		try:
 			cursor = self.get_cursor()

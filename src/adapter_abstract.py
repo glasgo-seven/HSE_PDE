@@ -1,5 +1,4 @@
 import os
-# import sys
 
 from utils import logger
 
@@ -32,24 +31,3 @@ class Abstract_adapter:
 	def close(self):
 		self.close_cursor()
 		self.close_connection()
-
-
-	def get_query(self, file):
-		current_path = os.path.dirname(os.path.abspath(__file__))
-		with open(current_path + file, 'r') as file:
-			sql_query = file.read()
-		return sql_query
-
-
-	# def execute_custom_query(self, query):
-	# 	try:
-	# 		cursor = self.get_cursor()
-	# 		cursor.execute(query)
-	# 		rows = cursor.fetchall()
-	# 		logger.debug(f"Get new records: {len(rows)}")
-	# 		return rows
-	# 	except Exception as e:
-	# 		logger.error(f"Error: {e}")
-	# 		sys.exit(1)
-	# 	finally:
-	# 		self.close()

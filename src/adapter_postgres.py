@@ -19,7 +19,6 @@ class Postgres_adapter(Abstract_adapter):
 		)
 		return super().get_cursor(connection)
 
-
 	def execute_commit_query(self, query):
 		try:
 			cursor = self.get_cursor()

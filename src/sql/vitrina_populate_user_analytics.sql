@@ -1,8 +1,18 @@
-DROP TABLE IF EXISTS Vitrina_UserAnalytics;
+TRUNCATE TABLE Vitrina_UserAnalytics;
 
 -- This vitrina focuses on user-related metrics
 -- such as registration trends and loyalty status distribution.
-CREATE TABLE Vitrina_UserAnalytics AS
+INSERT INTO Vitrina_UserAnalytics (
+	user_id,
+	first_name,
+	last_name,
+	email,
+	phone,
+	registration_date,
+	loyalty_status,
+	total_orders,
+	total_spent
+)
 SELECT 
 	Users.user_id,
 	Users.first_name,
